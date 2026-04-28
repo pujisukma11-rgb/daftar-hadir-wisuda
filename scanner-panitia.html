@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Scanner Panitia — Wisuda MTs MA Ma'arif Rembang</title>
+<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html5-qrcode/2.3.8/html5-qrcode.min.js"></script>
+<style>
+  :root {
+    --hijau: #1a4a2e; --hijau-mid: #256340; --hijau-light: #2d7a50;
+    --gold: #c9a84c; --gold-light: #e8c96a;
+    --cream: #fdf8ee;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    min-height: 100vh;
+    background: linear-gradient(160deg, var(--hijau) 0%, #0f2e1c 100%);
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    display: flex; align-items: flex-start; justify-content: center;
+    padding: 20px 16px;
+  }
+  .wrap { width: 100%; max-width: 420px; }
+
+  /* HEADER */
+  .header {
+    text-align: center; padding: 20px 0 24px;
+    animation: fadeDown 0.5s ease both;
+  }
+  @keyframes fadeDown { from { opacity: 0; transform: translateY(-16px); } to { opacity: 1; transform: translateY(0); } }
+  .header .badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: rgba(201,168,76,0.15); border: 1px solid rgba(201,168,76,0.3);
+    color: var(--gold-light); font-size: 11px; font-weight: 600;
+    padding: 5px 14px; border-radius: 20px; letter-spacing: 1px;
+    text-transform: uppercase; margin-bottom: 12px;
+  }
+  .header h1 { font-family: 'Amiri', serif; font-size: 22px; color: var(--gold-light); font-weight: 700; }
+  .header p { font-size: 12px; color: rgba(255,255,255,0.5); margin-top: 4px; }
+
+  /* SCANNER BOX */
+  .scanner-card {
+    background: var(--cream); border-radius: 20px; overflow: hidden;
+    box-shadow: 0 0 0 1px rgba(201,168,76,0.25), 0 20px 60px rgba(0,0,0,0.3);
+    margin-bottom: 16px;
+    animation: fadeUp 0.5s ease 0.1s both;
+  }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+  .scanner-header { background: linear-gradient(135deg, var(--hijau), var(--hijau-mid)); padding: 16px 20px; display: flex; align-items: center; justify-content: space-between; }
+  .scanner-header h2 { font-size: 14px; font-weight: 600; color: var(--gold-light); }
+  .scanner-status { display: flex; align-items: center; gap: 6px; font-size: 11px; color: rgba(255,255,255,0.6); }
+  .status-dot { width: 6px; height: 6px; border-radius: 50%; background: #4ade80; animation: blink 1.5s ease infinite; }
+  @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.2; } }
+
+  #reader { width: 100%; }
+  #reader video { width: 100% !important; }
+
+  .scanner-hint { padding: 12px 16px; text-align: center; font-size: 12px; color: #9a9078; background: rgba(201,168,76,0.05); border-top: 1px solid rgba(201,168,76,0.1); }
+
+  /* RESULT CARD */
+  .result-card {
+    border-radius: 20px; overflow: hidden;
+    box-shadow: 0 0 0 1px rgba(201,168,76,0.25), 0 20px 60px rgba(0,0,0,0.3);
+    margin-bottom: 16px; display: none;
+    animation: popUp 0.5s cubic-bezier(0.34,1.56,0.64,1) both;
+  }
+  @keyframes popUp { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
+
+  .result-success { background: linear-gradient(135deg, var(--hijau), var(--hijau-mid)); }
+  .result-error { background: linear-gradient(135deg, #7f1d1d, #991b1b); }
+
+  .result-inner { padding: 24px; }
+  .result-icon { font-size: 40px; text-align: center; margin-bottom: 12px; }
+  .result-status { font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; color: rgba(255,255,255,0.5); text-align: center; margin-bottom: 4px; }
+  .result-name { font-family: 'Amiri', serif; font-size: 24px; color: var(--gold-light); font-weight: 700; text-align: center; margin-bottom: 16px; }
+  .result-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.08); }
+  .result-row:last-child { border-bottom: none; }
+  .result-row .lbl { font-size: 11px; color: rgba(255,255,255,0.5); }
+  .result-row .val { font-size: 13px; color: rgba(255,255,255,0.9); font-weight: 500; }
+  .result-badge {
+    display: flex; align-items: center; justify-content: center; gap: 6px;
+    background: rgba(201,168,76,0.2); border: 1px solid rgba(201,168,76,0.4);
+    color: var(--gold-light); font-size: 12px; font-weight: 600;
+    padding: 8px; border-radius: 10px; margin-top: 14px;
+  }
+
+  /* COUNTER */
+  .counter-card {
+    background: rgba(255,255,255,0.05); border: 1px solid rgba(201,168,76,0.15);
+    border-radius: 16px; padding: 16px 20px;
+    display: flex; justify-content: space-around;
+    animation: fadeUp 0.5s ease 0.2s both;
+  }
+  .counter-item { text-align: center; }
+  .counter-num { font-family: 'Amiri', serif; font-size: 28px; color: var(--gold-light); font-weight: 700; line-height: 1; }
+  .counter-lbl { font-size: 11px; color: rgba(255,255,255,0.4); margin-top: 4px; letter-spacing: 0.5px; }
+  .counter-divider { width: 1px; background: rgba(201,168,76,0.15); }
+
+  .btn-scan-again {
+    width: 100%; padding: 14px;
+    background: rgba(201,168,76,0.15); border: 1px solid rgba(201,168,76,0.3);
+    color: var(--gold-light); border-radius: 12px;
+    font-size: 14px; font-weight: 600; font-family: 'Plus Jakarta Sans', sans-serif;
+    cursor: pointer; margin-top: 12px; margin-bottom: 16px;
+    transition: all 0.2s ease; display: none;
+  }
+  .btn-scan-again:hover { background: rgba(201,168,76,0.25); }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="header">
+    <div class="badge">📱 Mode Panitia</div>
+    <h1>Scanner Check-in</h1>
+    <p>Wisuda & Tasyakuran — MTs MA Ma'arif Rembang</p>
+  </div>
+
+  <!-- SCANNER -->
+  <div class="scanner-card">
+    <div class="scanner-header">
+      <h2>📷 Arahkan ke QR Code Tamu</h2>
+      <div class="scanner-status"><div class="status-dot"></div> Aktif</div>
+    </div>
+    <div id="reader"></div>
+    <div class="scanner-hint">Pastikan QR Code terlihat jelas di dalam frame</div>
+  </div>
+
+  <!-- SCAN AGAIN BUTTON -->
+  <button class="btn-scan-again" id="btnScanAgain" onclick="scanAgain()">🔄 Scan Tamu Berikutnya</button>
+
+  <!-- RESULT -->
+  <div class="result-card" id="resultCard">
+    <div class="result-inner" id="resultInner"></div>
+  </div>
+
+  <!-- COUNTER -->
+  <div class="counter-card">
+    <div class="counter-item">
+      <div class="counter-num" id="countSuccess">0</div>
+      <div class="counter-lbl">Berhasil</div>
+    </div>
+    <div class="counter-divider"></div>
+    <div class="counter-item">
+      <div class="counter-num" id="countFail">0</div>
+      <div class="counter-lbl">Gagal</div>
+    </div>
+    <div class="counter-divider"></div>
+    <div class="counter-item">
+      <div class="counter-num" id="countTotal">0</div>
+      <div class="counter-lbl">Total Scan</div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// ⚠️ GANTI URL INI dengan URL Google Apps Script Web App lo
+const SCRIPT_URL = 'YOUR_APPS_SCRIPT_URL_HERE';
+
+let scanner = null;
+let scanning = true;
+let countSuccess = 0, countFail = 0;
+
+function startScanner() {
+  scanner = new Html5Qrcode("reader");
+  scanner.start(
+    { facingMode: "environment" },
+    { fps: 10, qrbox: { width: 250, height: 250 } },
+    onScanSuccess,
+    () => {}
+  ).catch(err => {
+    document.querySelector('.scanner-hint').textContent = '⚠️ Izinkan akses kamera untuk menggunakan scanner.';
+  });
+}
+
+async function onScanSuccess(decodedText) {
+  if (!scanning) return;
+  scanning = false;
+
+  try {
+    const url = new URL(decodedText);
+    const id = url.searchParams.get('id');
+    if (!id) { showResult(false, null); return; }
+
+    const res = await fetch(`${SCRIPT_URL}?action=checkin&id=${id}`);
+    const data = await res.json();
+    showResult(data.success, data);
+  } catch (e) {
+    showResult(false, null);
+  }
+}
+
+function showResult(success, data) {
+  const card = document.getElementById('resultCard');
+  const inner = document.getElementById('resultInner');
+  card.className = `result-card ${success ? 'result-success' : 'result-error'}`;
+
+  if (success && data) {
+    countSuccess++;
+    const now = new Date();
+    inner.innerHTML = `
+      <div class="result-icon">✅</div>
+      <div class="result-status">Check-in Berhasil</div>
+      <div class="result-name">${data.nama}</div>
+      <div class="result-row"><span class="lbl">Tamu dari siswa</span><span class="val">${data.siswa}</span></div>
+      <div class="result-row"><span class="lbl">No. HP</span><span class="val">${data.hp}</span></div>
+      <div class="result-row"><span class="lbl">Waktu</span><span class="val">${now.toLocaleTimeString('id-ID', {hour:'2-digit', minute:'2-digit'})}</span></div>
+      <div class="result-badge">✦ Tamu Resmi Terdaftar</div>
+    `;
+  } else {
+    countFail++;
+    inner.innerHTML = `
+      <div class="result-icon">❌</div>
+      <div class="result-status" style="color:rgba(255,200,200,0.7)">Check-in Gagal</div>
+      <div class="result-name" style="color:#fca5a5; font-size:18px;">QR Tidak Valid</div>
+      <p style="text-align:center; color:rgba(255,255,255,0.6); font-size:13px; margin-top:8px;">QR Code tidak ditemukan atau sudah digunakan. Hubungi panitia utama.</p>
+    `;
+  }
+
+  document.getElementById('countSuccess').textContent = countSuccess;
+  document.getElementById('countFail').textContent = countFail;
+  document.getElementById('countTotal').textContent = countSuccess + countFail;
+
+  card.style.display = 'block';
+  document.getElementById('btnScanAgain').style.display = 'block';
+}
+
+function scanAgain() {
+  scanning = true;
+  document.getElementById('resultCard').style.display = 'none';
+  document.getElementById('btnScanAgain').style.display = 'none';
+}
+
+startScanner();
+</script>
+</body>
+</html>

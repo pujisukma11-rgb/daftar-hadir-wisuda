@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Check-in Berhasil — Wisuda MTs MA Ma'arif Rembang</title>
+<link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --hijau: #1a4a2e; --hijau-mid: #256340; --hijau-light: #2d7a50;
+    --gold: #c9a84c; --gold-light: #e8c96a; --gold-pale: #f5e9c0;
+    --cream: #fdf8ee;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    min-height: 100vh;
+    background: linear-gradient(160deg, var(--hijau) 0%, #0f2e1c 100%);
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    display: flex; align-items: center; justify-content: center;
+    padding: 24px 16px;
+  }
+  body::before {
+    content: ''; position: fixed; inset: 0;
+    background-image:
+      repeating-linear-gradient(45deg, transparent, transparent 40px, rgba(201,168,76,0.03) 40px, rgba(201,168,76,0.03) 41px),
+      repeating-linear-gradient(-45deg, transparent, transparent 40px, rgba(201,168,76,0.03) 40px, rgba(201,168,76,0.03) 41px);
+    pointer-events: none; z-index: 0;
+  }
+
+  /* LOADING STATE */
+  .loading-wrap {
+    position: relative; z-index: 1; text-align: center; color: white;
+    animation: fadeIn 0.4s ease both;
+  }
+  .spinner {
+    width: 50px; height: 50px; border-radius: 50%;
+    border: 3px solid rgba(201,168,76,0.2);
+    border-top-color: var(--gold);
+    animation: spin 0.8s linear infinite;
+    margin: 0 auto 16px;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+  /* CARD */
+  .card {
+    display: none;
+    position: relative; z-index: 1;
+    background: var(--cream); border-radius: 24px;
+    width: 100%; max-width: 420px; overflow: hidden;
+    box-shadow: 0 0 0 1px rgba(201,168,76,0.3), 0 32px 80px rgba(0,0,0,0.4);
+    animation: bounceCard 0.7s cubic-bezier(0.34,1.56,0.64,1) both;
+  }
+  @keyframes bounceCard { from { opacity: 0; transform: scale(0.8); } to { opacity: 1; transform: scale(1); } }
+
+  .card-header {
+    background: linear-gradient(160deg, var(--hijau) 0%, var(--hijau-mid) 100%);
+    padding: 32px 28px; text-align: center; position: relative; overflow: hidden;
+  }
+  .card-header::before {
+    content: ''; position: absolute; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none'%3E%3Cg fill='%23c9a84c' fill-opacity='0.06'%3E%3Cpath d='M30 0 L60 30 L30 60 L0 30 Z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  }
+  .ornament-top { display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 20px; }
+  .ornament-line { height: 1px; width: 48px; background: linear-gradient(90deg, transparent, var(--gold)); }
+  .ornament-line.right { background: linear-gradient(90deg, var(--gold), transparent); }
+  .ornament-diamond { width: 8px; height: 8px; background: var(--gold); transform: rotate(45deg); }
+
+  .check-circle {
+    width: 80px; height: 80px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--gold) 0%, var(--gold-light) 100%);
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 16px; font-size: 38px;
+    box-shadow: 0 0 0 8px rgba(201,168,76,0.15), 0 8px 32px rgba(201,168,76,0.4);
+    animation: popIn 0.6s cubic-bezier(0.34,1.56,0.64,1) 0.3s both;
+  }
+  @keyframes popIn { from { transform: scale(0); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
+  .header-title { font-family: 'Amiri', serif; font-size: 28px; color: var(--gold-light); font-weight: 700; margin-bottom: 4px; }
+  .header-sub { font-size: 12px; color: rgba(255,255,255,0.6); letter-spacing: 1px; text-transform: uppercase; margin-top: 4px; }
+
+  .card-body { padding: 28px 24px; }
+
+  .guest-card {
+    background: linear-gradient(135deg, var(--hijau) 0%, var(--hijau-mid) 100%);
+    border-radius: 16px; padding: 22px; margin-bottom: 20px;
+    position: relative; overflow: hidden;
+    animation: slideUp 0.5s ease 0.5s both;
+  }
+  @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+  .guest-card::after {
+    content: '✦'; position: absolute; bottom: -15px; right: 5px;
+    font-size: 80px; color: rgba(201,168,76,0.07); line-height: 1;
+  }
+
+  .guest-label { font-size: 11px; color: rgba(255,255,255,0.55); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 4px; }
+  .guest-name { font-family: 'Amiri', serif; font-size: 24px; color: var(--gold-light); font-weight: 700; margin-bottom: 14px; line-height: 1.2; }
+  .guest-row { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px; }
+  .guest-detail-label { font-size: 11px; color: rgba(255,255,255,0.5); }
+  .guest-detail-val { font-size: 13px; color: rgba(255,255,255,0.9); font-weight: 500; text-align: right; max-width: 60%; }
+  .divider { height: 1px; background: rgba(201,168,76,0.2); margin: 12px 0; }
+  .status-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: rgba(201,168,76,0.2); border: 1px solid rgba(201,168,76,0.4);
+    color: var(--gold-light); font-size: 12px; font-weight: 600;
+    padding: 6px 14px; border-radius: 20px; margin-top: 4px;
+  }
+  .status-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--gold-light); animation: blink 1.5s ease infinite; }
+  @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+
+  .welcome-msg {
+    text-align: center; padding: 16px;
+    background: rgba(26,74,46,0.06); border: 1px solid rgba(201,168,76,0.2);
+    border-radius: 14px; margin-bottom: 16px;
+    animation: slideUp 0.5s ease 0.7s both;
+  }
+  .welcome-msg .arabic { font-family: 'Amiri', serif; font-size: 20px; color: var(--hijau); margin-bottom: 6px; }
+  .welcome-msg p { font-size: 12px; color: #7a7060; line-height: 1.6; }
+
+  .timestamp {
+    text-align: center; font-size: 11px; color: #b0a88a;
+    animation: slideUp 0.5s ease 0.9s both;
+  }
+
+  /* ERROR STATE */
+  .error-card {
+    display: none; position: relative; z-index: 1;
+    background: var(--cream); border-radius: 24px;
+    width: 100%; max-width: 420px; overflow: hidden;
+    box-shadow: 0 0 0 1px rgba(201,168,76,0.3), 0 32px 80px rgba(0,0,0,0.4);
+    text-align: center; padding: 48px 28px;
+    animation: fadeIn 0.5s ease both;
+  }
+  .error-icon { font-size: 60px; margin-bottom: 16px; }
+  .error-title { font-family: 'Amiri', serif; font-size: 24px; color: #c0392b; font-weight: 700; margin-bottom: 8px; }
+  .error-sub { font-size: 13px; color: #7a7060; line-height: 1.6; }
+</style>
+</head>
+<body>
+
+<!-- LOADING -->
+<div class="loading-wrap" id="loadingWrap">
+  <div class="spinner"></div>
+  <p style="color:rgba(255,255,255,0.7); font-size:13px;">Memvalidasi QR Code...</p>
+</div>
+
+<!-- SUCCESS CARD -->
+<div class="card" id="successCard">
+  <div class="card-header">
+    <div class="ornament-top">
+      <div class="ornament-line"></div>
+      <div class="ornament-diamond"></div>
+      <div class="ornament-line right"></div>
+    </div>
+    <div class="check-circle">✅</div>
+    <div class="header-title">Ahlan Wasahlan!</div>
+    <div class="header-sub">Check-in Berhasil</div>
+  </div>
+
+  <div class="card-body">
+    <div class="guest-card">
+      <div class="guest-label">Nama Tamu</div>
+      <div class="guest-name" id="guestName">—</div>
+      <div class="guest-row">
+        <div class="guest-detail-label">Tamu dari siswa</div>
+        <div class="guest-detail-val" id="guestSiswa">—</div>
+      </div>
+      <div class="guest-row">
+        <div class="guest-detail-label">No. HP</div>
+        <div class="guest-detail-val" id="guestHP">—</div>
+      </div>
+      <div class="divider"></div>
+      <div class="status-badge">
+        <div class="status-dot"></div>
+        ✦ Telah Terdaftar & Check-in
+      </div>
+    </div>
+
+    <div class="welcome-msg">
+      <div class="arabic">بارك الله فيكم</div>
+      <p>Selamat datang di acara Wisuda & Tasyakuran<br>MTs – MA Ma'arif Rembang.<br>Silakan menuju tempat duduk yang tersedia.</p>
+    </div>
+
+    <div class="timestamp" id="timestampEl"></div>
+  </div>
+</div>
+
+<!-- ERROR CARD -->
+<div class="error-card" id="errorCard">
+  <div class="error-icon">❌</div>
+  <div class="error-title">QR Tidak Valid</div>
+  <div class="error-sub">QR Code ini tidak ditemukan atau sudah tidak berlaku.<br>Silakan hubungi panitia untuk bantuan.</div>
+</div>
+
+<script>
+// ⚠️ GANTI URL INI dengan URL Google Apps Script Web App lo
+const SCRIPT_URL = 'YOUR_APPS_SCRIPT_URL_HERE';
+
+async function init() {
+  const params = new URLSearchParams(window.location.search);
+  const id = params.get('id');
+
+  if (!id) { showError(); return; }
+
+  try {
+    const res = await fetch(`${SCRIPT_URL}?action=checkin&id=${id}`);
+    const data = await res.json();
+
+    if (data.success) {
+      document.getElementById('guestName').textContent = data.nama || '—';
+      document.getElementById('guestSiswa').textContent = data.siswa || '—';
+      document.getElementById('guestHP').textContent = data.hp || '—';
+
+      const now = new Date();
+      document.getElementById('timestampEl').textContent =
+        `Check-in: ${now.toLocaleDateString('id-ID', {weekday:'long', day:'numeric', month:'long', year:'numeric'})} · ${now.toLocaleTimeString('id-ID', {hour:'2-digit', minute:'2-digit'})}`;
+
+      document.getElementById('loadingWrap').style.display = 'none';
+      document.getElementById('successCard').style.display = 'block';
+    } else {
+      showError();
+    }
+  } catch (e) {
+    showError();
+  }
+}
+
+function showError() {
+  document.getElementById('loadingWrap').style.display = 'none';
+  document.getElementById('errorCard').style.display = 'block';
+}
+
+init();
+</script>
+</body>
+</html>

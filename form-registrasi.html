@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Registrasi Tamu — Wisuda MTs MA Ma'arif Rembang</title>
+<link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --hijau: #1a4a2e;
+    --hijau-mid: #256340;
+    --hijau-light: #2d7a50;
+    --gold: #c9a84c;
+    --gold-light: #e8c96a;
+    --gold-pale: #f5e9c0;
+    --cream: #fdf8ee;
+    --white: #ffffff;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    min-height: 100vh;
+    background-color: var(--hijau);
+    background-image:
+      radial-gradient(ellipse at top left, #256340 0%, transparent 60%),
+      radial-gradient(ellipse at bottom right, #0f2e1c 0%, transparent 60%);
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    display: flex; align-items: center; justify-content: center;
+    padding: 24px 16px;
+  }
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image:
+      repeating-linear-gradient(45deg, transparent, transparent 40px, rgba(201,168,76,0.03) 40px, rgba(201,168,76,0.03) 41px),
+      repeating-linear-gradient(-45deg, transparent, transparent 40px, rgba(201,168,76,0.03) 40px, rgba(201,168,76,0.03) 41px);
+    pointer-events: none; z-index: 0;
+  }
+  .card {
+    position: relative; z-index: 1;
+    background: var(--cream);
+    border-radius: 24px; width: 100%; max-width: 420px;
+    overflow: hidden;
+    box-shadow: 0 0 0 1px rgba(201,168,76,0.3), 0 32px 80px rgba(0,0,0,0.4);
+    animation: cardIn 0.7s cubic-bezier(0.34,1.56,0.64,1) both;
+  }
+  @keyframes cardIn {
+    from { opacity: 0; transform: translateY(40px) scale(0.95); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+  }
+  .card-header {
+    background: linear-gradient(160deg, var(--hijau) 0%, var(--hijau-mid) 100%);
+    padding: 32px 28px 28px; text-align: center; position: relative; overflow: hidden;
+  }
+  .card-header::before {
+    content: ''; position: absolute; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none'%3E%3Cg fill='%23c9a84c' fill-opacity='0.06'%3E%3Cpath d='M30 0 L60 30 L30 60 L0 30 Z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    pointer-events: none;
+  }
+  .ornament-top { display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 16px; }
+  .ornament-line { height: 1px; width: 48px; background: linear-gradient(90deg, transparent, var(--gold)); }
+  .ornament-line.right { background: linear-gradient(90deg, var(--gold), transparent); }
+  .ornament-diamond { width: 8px; height: 8px; background: var(--gold); transform: rotate(45deg); }
+  .logo-circle {
+    width: 72px; height: 72px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--gold) 0%, var(--gold-light) 100%);
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 16px; font-size: 32px;
+    box-shadow: 0 4px 20px rgba(201,168,76,0.4);
+    animation: pulse 3s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { box-shadow: 0 4px 20px rgba(201,168,76,0.4); }
+    50% { box-shadow: 0 4px 32px rgba(201,168,76,0.7); }
+  }
+  .header-title { font-family: 'Amiri', serif; font-size: 22px; color: var(--gold-light); font-weight: 700; line-height: 1.3; margin-bottom: 4px; }
+  .header-subtitle { font-size: 11px; color: rgba(255,255,255,0.6); letter-spacing: 1.5px; text-transform: uppercase; margin-top: 6px; }
+  .card-body { padding: 28px 24px 24px; }
+  .section-label {
+    font-size: 11px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase;
+    color: var(--hijau-mid); margin-bottom: 18px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .section-label::after { content: ''; flex: 1; height: 1px; background: linear-gradient(90deg, var(--gold-pale), transparent); }
+  .field { margin-bottom: 16px; }
+  .field label { display: block; font-size: 12px; font-weight: 600; color: var(--hijau); margin-bottom: 6px; }
+  .field label span.req { color: var(--gold); margin-left: 2px; }
+  .field input {
+    width: 100%; padding: 13px 16px;
+    border: 1.5px solid #ddd8c8; border-radius: 12px;
+    font-size: 14px; font-family: 'Plus Jakarta Sans', sans-serif;
+    color: #1a2e20; background: var(--white);
+    transition: all 0.2s ease; outline: none; -webkit-appearance: none;
+  }
+  .field input:focus { border-color: var(--hijau-light); box-shadow: 0 0 0 3px rgba(45,122,80,0.12); }
+  .field input::placeholder { color: #b0a88a; }
+  .info-box {
+    background: linear-gradient(135deg, rgba(26,74,46,0.06), rgba(201,168,76,0.08));
+    border: 1px solid rgba(201,168,76,0.25);
+    border-radius: 12px; padding: 12px 14px; margin-bottom: 20px;
+    display: flex; gap: 10px; align-items: flex-start;
+  }
+  .info-box .icon { font-size: 16px; margin-top: 1px; flex-shrink: 0; }
+  .info-box p { font-size: 12px; color: #5a6e5a; line-height: 1.6; }
+  .btn-submit {
+    width: 100%; padding: 15px;
+    background: linear-gradient(135deg, var(--hijau) 0%, var(--hijau-mid) 100%);
+    color: var(--gold-light); border: none; border-radius: 14px;
+    font-size: 15px; font-weight: 600; font-family: 'Plus Jakarta Sans', sans-serif;
+    cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;
+    transition: all 0.25s ease; box-shadow: 0 4px 20px rgba(26,74,46,0.35);
+  }
+  .btn-submit:hover { transform: translateY(-1px); box-shadow: 0 8px 28px rgba(26,74,46,0.45); }
+  .btn-submit:disabled { opacity: 0.7; cursor: not-allowed; transform: none; }
+  .card-footer { padding: 0 24px 20px; text-align: center; }
+  .footer-note { font-size: 11px; color: #9a9078; display: flex; align-items: center; justify-content: center; gap: 5px; }
+
+  /* SUCCESS */
+  .success-screen { display: none; text-align: center; padding: 40px 28px; animation: fadeIn 0.5s ease both; }
+  @keyframes fadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+  .success-icon {
+    width: 90px; height: 90px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--hijau) 0%, var(--hijau-light) 100%);
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 24px; font-size: 40px;
+    box-shadow: 0 8px 32px rgba(26,74,46,0.3);
+    animation: bounceIn 0.6s cubic-bezier(0.34,1.56,0.64,1) both;
+  }
+  @keyframes bounceIn { from { transform: scale(0); opacity: 0; } to { transform: scale(1); opacity: 1); } }
+  .success-title { font-family: 'Amiri', serif; font-size: 26px; color: var(--hijau); font-weight: 700; margin-bottom: 8px; }
+  .success-subtitle { font-size: 13px; color: #7a7060; margin-bottom: 24px; line-height: 1.6; }
+  .success-card {
+    background: linear-gradient(135deg, var(--hijau) 0%, var(--hijau-mid) 100%);
+    border-radius: 16px; padding: 20px; margin-bottom: 20px; position: relative; overflow: hidden;
+  }
+  .success-name { font-family: 'Amiri', serif; font-size: 22px; color: var(--gold-light); font-weight: 700; margin-bottom: 4px; }
+  .success-info { font-size: 12px; color: rgba(255,255,255,0.65); margin-bottom: 2px; }
+  .success-badge {
+    display: inline-flex; align-items: center; gap: 5px;
+    background: rgba(201,168,76,0.2); border: 1px solid rgba(201,168,76,0.4);
+    color: var(--gold-light); font-size: 11px; font-weight: 600;
+    padding: 4px 12px; border-radius: 20px; margin-top: 10px;
+  }
+  .email-sent {
+    background: rgba(45,122,80,0.1); border: 1px solid rgba(45,122,80,0.3);
+    border-radius: 12px; padding: 14px; margin-bottom: 16px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .email-sent .icon { font-size: 24px; }
+  .email-sent p { font-size: 12px; color: #3a6a3a; line-height: 1.5; text-align: left; }
+  .email-sent strong { color: var(--hijau); }
+  .ornament-divider { display: flex; align-items: center; justify-content: center; gap: 8px; margin: 16px 0; color: var(--gold); font-size: 12px; opacity: 0.5; }
+  .loading-dots span { display: inline-block; width: 6px; height: 6px; background: var(--gold-light); border-radius: 50%; animation: dotPulse 1.4s ease-in-out infinite; margin: 0 2px; }
+  .loading-dots span:nth-child(2) { animation-delay: 0.2s; }
+  .loading-dots span:nth-child(3) { animation-delay: 0.4s; }
+  @keyframes dotPulse { 0%, 80%, 100% { transform: scale(0.6); opacity: 0.4; } 40% { transform: scale(1); opacity: 1; } }
+</style>
+</head>
+<body>
+<div class="card" id="mainCard">
+
+  <!-- FORM VIEW -->
+  <div id="formView">
+    <div class="card-header">
+      <div class="ornament-top">
+        <div class="ornament-line"></div>
+        <div class="ornament-diamond"></div>
+        <div class="ornament-line right"></div>
+      </div>
+      <div class="logo-circle">🕌</div>
+      <div class="header-title">Wisuda & Tasyakuran Siswa<br>MTs – MA Ma'arif Rembang</div>
+      <div class="header-subtitle">Registrasi Tamu Undangan</div>
+    </div>
+
+    <div class="card-body">
+      <div class="info-box">
+        <div class="icon">📧</div>
+        <p>Setelah mengisi form ini, QR Code undangan akan <strong>otomatis dikirim ke email</strong> Anda. Tunjukkan QR Code tersebut saat memasuki area acara.</p>
+      </div>
+
+      <div class="section-label">Data Tamu</div>
+
+      <div class="field">
+        <label>Nama Lengkap <span class="req">*</span></label>
+        <input type="text" id="namaTamu" placeholder="Masukkan nama lengkap Anda" autocomplete="name">
+      </div>
+      <div class="field">
+        <label>Nama Siswa yang Diwisuda <span class="req">*</span></label>
+        <input type="text" id="namaSiswa" placeholder="Nama putra/putri yang diwisuda">
+      </div>
+      <div class="field">
+        <label>Nomor HP <span class="req">*</span></label>
+        <input type="tel" id="nomorHP" placeholder="08xxxxxxxxxx" inputmode="numeric">
+      </div>
+      <div class="field">
+        <label>Alamat Email <span class="req">*</span></label>
+        <input type="email" id="emailTamu" placeholder="email@contoh.com" inputmode="email">
+      </div>
+
+      <button class="btn-submit" id="btnSubmit" onclick="handleSubmit()">
+        <span id="btnText">✦ Daftar & Kirim QR ke Email</span>
+      </button>
+    </div>
+
+    <div class="card-footer">
+      <p class="footer-note">🔒 Data Anda aman dan hanya digunakan untuk keperluan acara</p>
+    </div>
+  </div>
+
+  <!-- SUCCESS VIEW -->
+  <div class="success-screen" id="successView">
+    <div class="success-icon">✅</div>
+    <div class="ornament-top" style="margin-bottom:12px;">
+      <div class="ornament-line"></div><div class="ornament-diamond"></div><div class="ornament-line right"></div>
+    </div>
+    <div class="success-title">Registrasi Berhasil!</div>
+    <div class="success-subtitle">Data Anda telah tercatat.<br>Silakan cek email untuk QR Code undangan Anda.</div>
+
+    <div class="success-card">
+      <div class="success-info">Nama Tamu</div>
+      <div class="success-name" id="displayNama">—</div>
+      <div class="success-info" style="margin-top:10px;">Tamu dari siswa</div>
+      <div style="color:rgba(255,255,255,0.85); font-size:14px; font-weight:500;" id="displaySiswa">—</div>
+      <div class="success-badge">✦ Registrasi Berhasil</div>
+    </div>
+
+    <div class="email-sent">
+      <div class="icon">📧</div>
+      <p>QR Code undangan telah dikirim ke<br><strong id="displayEmail">—</strong><br>Tunjukkan QR Code saat memasuki area acara.</p>
+    </div>
+
+    <div class="ornament-divider">✦ &nbsp; بارك الله فيكم &nbsp; ✦</div>
+    <p style="font-size:12px; color:#9a9078; line-height:1.6;">Jazakumullahu khairan atas kehadiran Anda. 🤲</p>
+  </div>
+
+</div>
+
+<script>
+// ⚠️ GANTI URL INI dengan URL Google Apps Script Web App lo
+const SCRIPT_URL = 'YOUR_APPS_SCRIPT_URL_HERE';
+
+async function handleSubmit() {
+  const nama = document.getElementById('namaTamu').value.trim();
+  const siswa = document.getElementById('namaSiswa').value.trim();
+  const hp = document.getElementById('nomorHP').value.trim();
+  const email = document.getElementById('emailTamu').value.trim();
+
+  if (!nama || !siswa || !hp || !email) {
+    alert('Mohon lengkapi semua data terlebih dahulu.');
+    return;
+  }
+  if (!email.includes('@')) {
+    alert('Format email tidak valid.');
+    return;
+  }
+
+  const btn = document.getElementById('btnSubmit');
+  const btnText = document.getElementById('btnText');
+  btn.disabled = true;
+  btnText.innerHTML = '<span class="loading-dots"><span></span><span></span><span></span></span>';
+
+  try {
+    await fetch(SCRIPT_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ nama, siswa, hp, email })
+    });
+
+    document.getElementById('displayNama').textContent = nama;
+    document.getElementById('displaySiswa').textContent = siswa;
+    document.getElementById('displayEmail').textContent = email;
+    document.getElementById('formView').style.display = 'none';
+    document.getElementById('successView').style.display = 'block';
+
+  } catch (err) {
+    alert('Terjadi kesalahan. Silakan coba lagi.');
+    btn.disabled = false;
+    btnText.textContent = '✦ Daftar & Kirim QR ke Email';
+  }
+}
+</script>
+</body>
+</html>
